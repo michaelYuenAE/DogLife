@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    //login page
+    <color name="et_border_bg">#edf1f2</color>
+    <color name="white">#ffffff</color>
+    <color name="blue">#107EFF</color>
+</resources>
