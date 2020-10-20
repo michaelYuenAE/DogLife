@@ -4,5 +4,6 @@
     <string name="login_user_name_hint">Phone number, email address or username</string>
     <string name="login_user_password_hint">Password</string>
     <string name="log_in">Log in</string>
+    <string name="login_register">CREATE NEW ACCOUNT</string>
 
 </resources>
