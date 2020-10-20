@@ -50,8 +50,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/log_in"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/tv_register_button"
+        style="@style/LoginRegisterButtonStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="@dimen/spacing_big"
+        android:text="@string/login_register"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
