@@ -5,5 +5,7 @@
     <string name="login_user_password_hint">Password</string>
     <string name="log_in">Log in</string>
     <string name="login_register">CREATE NEW ACCOUNT</string>
+    <string name="adopt_dog_for_adoption_title">Dogs Available for Adoption</string>
+    <string name="adopt_recently_view_animal">Recently Viewed Pets</string>
 
 </resources>
