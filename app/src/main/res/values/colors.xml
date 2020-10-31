@@ -8,7 +8,10 @@
     <color name="et_border_bg">#edf1f2</color>
     <color name="white">#ffffff</color>
     <color name="blue">#107EFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#808080</color>
 
+    #808080
     <color name="fifty_percent_transparent_blue">#80107EFF</color>
     <color name="twenty_percent_transparent_blue">#30107EFF</color>
 

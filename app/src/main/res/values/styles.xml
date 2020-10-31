@@ -40,4 +40,11 @@
         <item name="android:background">@color/twenty_percent_transparent_blue</item>
         <item name="android:textColor">@color/blue</item>
     </style>
+
+    <style name="Theme.App.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">#d32f2f</item>
+        <item name="colorControlActivated">#ff5722</item>
+        <item name="colorControlHighlight">#f44336</item>
+    </style>
+
 </resources>

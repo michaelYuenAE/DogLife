@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_adopt_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/adopt_dog_for_adoption_title"/>
+
+    <include
+        android:id="@+id/name_field"
+        layout="@layout/register_detail_item"/>
+
+    <include
+        android:id="@+id/type_field"
+        layout="@layout/register_animal_type_item"/>
+
+    <include
+        android:id="@+id/address_field"
+        layout="@layout/register_detail_item"/>
+
+    <include
+        android:id="@+id/add_image_field"
+        layout="@layout/register_add_images"/>
+
+
+</LinearLayout>
