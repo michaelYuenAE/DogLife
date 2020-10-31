@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.doglife.adopt.DogAdoptionFragment
 import com.example.doglife.databinding.ActivityMainBinding
 
 class MainActivity : FragmentActivity () {
