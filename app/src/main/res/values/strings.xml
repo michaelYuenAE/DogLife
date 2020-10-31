@@ -14,5 +14,6 @@
     <string name="register_title_image">Add image</string>
     <string name="common_dog">Dog</string>
     <string name="common_cat">Cat</string>
+    <string name="common_submit">Submit</string>
 
 </resources>

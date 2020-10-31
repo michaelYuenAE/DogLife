@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.doglife.adopt.DogAdoptionFragment
 import com.example.doglife.databinding.ActivityMainBinding
+import com.example.doglife.registerPet.RegisterPetFragment
 
 class MainActivity : FragmentActivity () {
     private lateinit var mBinding: ActivityMainBinding
@@ -16,9 +17,10 @@ class MainActivity : FragmentActivity () {
 
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        val dogAdoptionFragment = DogAdoptionFragment()
+//        val dogAdoptionFragment = DogAdoptionFragment()
+        val registerPetBinding = RegisterPetFragment()
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_main_placeholder, dogAdoptionFragment)
+        fragmentTransaction.add(R.id.fragment_main_placeholder, registerPetBinding)
         fragmentTransaction.commit()
     }
 

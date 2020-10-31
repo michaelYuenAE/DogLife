@@ -1,7 +1,7 @@
 package com.example.doglife.User
 
-import com.example.doglife.Model.CountryCode
-import com.example.doglife.Model.Dog
+import com.example.doglife.model.CountryCode
+import com.example.doglife.model.Dog
 
 class User (
     val id: String,

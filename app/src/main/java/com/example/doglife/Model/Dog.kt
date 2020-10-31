@@ -1,4 +1,4 @@
-package com.example.doglife.Model
+package com.example.doglife.model
 
 import java.util.*
 
