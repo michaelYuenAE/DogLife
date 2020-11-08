@@ -11,8 +11,12 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.doglife.R
 import com.example.doglife.databinding.FragmentRegisterPetBinding
+import com.example.doglife.filepreview.FilePreviewAdapter
 import com.example.doglife.retrofit.ApiService
 import com.example.doglife.retrofit.ApiUtils
 import com.example.doglife.retrofit.ApiUtils.Companion.API_BASE_URL
@@ -33,13 +37,10 @@ class RegisterPetFragment: Fragment() {
     private lateinit var mBinding: FragmentRegisterPetBinding
     private lateinit var mContext: Context
     private lateinit var mApiService: ApiService
-    private lateinit var imagePicker: ImagePicker
-    var imagesList: List<ImageItem>? = null
+    private lateinit var mImagePicker: ImagePicker
+    private var mImagePreviewAdapter: FilePreviewAdapter? = null
+    private var imagesList: MutableLiveData<List<ImageItem>?> = MutableLiveData(null)
     private val TAG: String = this::class.java.simpleName
-
-    companion object {
-        const val INTENT_PICK_IMAGE = 1
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,19 +50,18 @@ class RegisterPetFragment: Fragment() {
         mBinding = FragmentRegisterPetBinding.inflate(inflater, container, false)
         mContext = mBinding.root.context
         mApiService = ApiUtils.getApiService()
-        imagesList = listOf()
 
-        imagePicker = ImagePicker.getInstance()
-        imagePicker.imageLoader = GlideImageLoader() //设置图片加载器
-        imagePicker.isShowCamera = true //显示拍照按钮
-        imagePicker.isCrop = true //允许裁剪（单选才有效）
-        imagePicker.isSaveRectangle = true //是否按矩形区域保存
-        imagePicker.selectLimit = 9 //选中数量限制
-        imagePicker.style = CropImageView.Style.RECTANGLE //裁剪框的形状
-        imagePicker.focusWidth = 800 //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        imagePicker.focusHeight = 800 //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        imagePicker.outPutX = 1000 //保存文件的宽度。单位像素
-        imagePicker.outPutY = 1000 //保存文件的高度。单位像素
+        mImagePicker = ImagePicker.getInstance()
+        mImagePicker.imageLoader = GlideImageLoader(mContext) //设置图片加载器
+        mImagePicker.isShowCamera = true //显示拍照按钮
+        mImagePicker.isCrop = true //允许裁剪（单选才有效）
+        mImagePicker.isSaveRectangle = true //是否按矩形区域保存
+        mImagePicker.selectLimit = 9 //选中数量限制
+        mImagePicker.style = CropImageView.Style.RECTANGLE //裁剪框的形状
+        mImagePicker.focusWidth = 800 //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+        mImagePicker.focusHeight = 800 //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+        mImagePicker.outPutX = 1000 //保存文件的宽度。单位像素
+        mImagePicker.outPutY = 1000 //保存文件的高度。单位像素
 
 
         mBinding.addImageField.ivAdd.setOnClickListener(View.OnClickListener {
@@ -80,6 +80,15 @@ class RegisterPetFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRegisterView()
         initClickListener()
+        initImageListObserver()
+    }
+
+    private fun initImageListObserver() {
+        imagesList.observe(viewLifecycleOwner, Observer { data ->
+            if (data != null) {
+                mImagePreviewAdapter?.setData(data)
+            }
+        })
     }
 
     private fun initRegisterView() {
@@ -97,7 +106,6 @@ class RegisterPetFragment: Fragment() {
                 checkedRadioButtonId
             ).text.toString()
             val address = mBinding.addressField.tvDescription.text.toString().trim()
-
             //image later
             if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(address)) {
                 sendPost(name, type, address)
@@ -132,32 +140,44 @@ class RegisterPetFragment: Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == INTENT_PICK_IMAGE) {
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
             if (data != null) {
-                imagesList = data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) as List<ImageItem>?
-//                val adapter = MyAdapter(imagesList)
-//                gridView.setAdapter(adapter)
-//                images.setText("已选择" + imagesList.size + "张")
-            } else {
-                Toast.makeText(requireContext(), "没有选择图片", Toast.LENGTH_SHORT).show()
+                imagesList.postValue(data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) as List<ImageItem>?)
+                imagesList.value.let { data ->
+                    if (data.isNullOrEmpty()) {
+                        return
+                    }
+                    mImagePreviewAdapter = FilePreviewAdapter(mContext, data) { view, path ->
+                        val newImageList = imagesList.value?.filter { it.path != path} ?: mutableListOf()
+                        imagesList.postValue(newImageList)
+                    }
+                    mBinding.addImageField.imagePreview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    mBinding.addImageField.imagePreview.adapter = mImagePreviewAdapter
+                    Toast.makeText(
+                        requireContext(),
+                        "Selected: ${data.size} images",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
             }
         }
     }
 
     //upload files for new pets
     private fun uploadFiles() {
-        if(imagesList.isNullOrEmpty()) {
-            Toast.makeText(mContext, "Can't choose pictures", Toast.LENGTH_SHORT).show();
+        if(imagesList.value.isNullOrEmpty()) {
+            Toast.makeText(mContext, "Can't choose pictures", Toast.LENGTH_SHORT).show()
             return;
         }
         val files = mutableMapOf<String, RequestBody>()
-        imagesList!!.forEachIndexed { index, image ->
+        imagesList.value?.forEachIndexed { index, image ->
             val file = File(image.path)
             files["file" + index + "\" filename=\"" + file.name] = RequestBody.create(
                 MediaType.parse(
-                    imagesList!![index].mimeType
+                    imagesList.value?.get(index)?.mimeType?: ""
                 ), file
-            );
+            )
         }
         mApiService.uploadMultipleFiles(files).enqueue(object :
             Callback<ApiService.UploadResult> {
@@ -197,43 +217,5 @@ class RegisterPetFragment: Fragment() {
         }
         return sb.toString().substring(0, sb.toString().length - 1)
     }
-//
-//    private class MyAdapter(private var items: List<ImageItem>) :
-//        BaseAdapter() {
-//        fun setData(items: List<ImageItem>) {
-//            this.items = items
-//            notifyDataSetChanged()
-//        }
-//
-//        override fun getCount(): Int {
-//            return items.size
-//        }
-//
-//        override fun getItem(position: Int): ImageItem {
-//            return items[position]
-//        }
-//
-//        override fun getItemId(position: Int): Long {
-//            return position.toLong()
-//        }
-//
-//        override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-//            val imageView: ImageView
-//            val size: Int = .getWidth() / 3
-//            if (convertView == null) {
-//                imageView = ImageView(this@MainActivity)
-//                val params = AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, size)
-//                imageView.setLayoutParams(params)
-//                imageView.setBackgroundColor(Color.parseColor("#88888888"))
-//            } else {
-//                imageView = convertView as ImageView
-//            }
-//            imagePicker.getImageLoader()
-//                .displayImage(this@MainActivity, getItem(position).path, imageView, size, size)
-//            return imageView
-//        }
-//    }
-
-
 
 }

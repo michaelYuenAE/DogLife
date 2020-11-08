@@ -31,7 +31,9 @@
 
         <include
             android:id="@+id/add_image_field"
-            layout="@layout/register_add_images" />
+            layout="@layout/register_add_images"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <Button
             android:id="@+id/button_submit"

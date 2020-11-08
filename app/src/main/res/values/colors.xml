@@ -15,4 +15,20 @@
     <color name="fifty_percent_transparent_blue">#80107EFF</color>
     <color name="twenty_percent_transparent_blue">#30107EFF</color>
 
+
+    //common color value
+    <color name="lc_transparent">#00000000</color>
+    <color name="lc_white">#ffffffff</color>
+    <color name="lc_gray">#C6C6C6</color>
+    <color name="lc_blue">#0091FF</color>
+    <color name="mc_blue">#3984e6</color>
+    <color name="mc_dark_blue">#17246D</color>
+    <color name="lc_light_blue">#d7e6fa</color>
+    <color name="mc_grey">#707D80</color>
+    <color name="lc_fifty_percent_transparent_black">#80000000</color>
+    <color name="lc_semi_transparent_white">#E0ffffff</color>
+    <color name="lc_semi_transparent_black">#E0000000</color>
+
+    <color name="blackAlpha">#80000000</color>
+    <color name="lc_gray_999">#999999</color>
 </resources>

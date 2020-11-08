@@ -4,6 +4,21 @@
 
     <dimen name="et_font_size_default">16sp</dimen>
 
+    <!--font size-->
+    <dimen name="lc_font_size_XS">10sp</dimen>
+    <dimen name="lc_font_size_XS2">11sp</dimen>
+    <dimen name="lc_font_size_S">12sp</dimen>
+    <dimen name="lc_font_size_S2">13sp</dimen>
+    <dimen name="lc_font_size_M">14sp</dimen>
+    <dimen name="lc_font_size_M2">16sp</dimen>
+    <dimen name="lc_font_size_M3">17sp</dimen>
+    <dimen name="lc_font_size_L">18sp</dimen>
+    <dimen name="lc_font_size_L1">19sp</dimen>
+    <dimen name="lc_font_size_L2">20sp</dimen>
+    <dimen name="lc_font_size_XL">26sp</dimen>
+    <dimen name="lc_font_size_XL2">28sp</dimen>
+    <dimen name="lc_font_size_XXL">34sp</dimen>
+
     <!--spacing-->
     <dimen name="spacing_big">36dp</dimen>
     <dimen name="spacing_medium">24dp</dimen>
@@ -12,4 +27,37 @@
     <dimen name="spacing_login">8dp</dimen>
     <dimen name="default_edit_height">30dp</dimen>
     <dimen name="default_edit_width">200dp</dimen>
+
+    <dimen name="spacing_XS">2dp</dimen>
+    <dimen name="spacing_S">4dp</dimen>
+    <dimen name="spacing_S2">6dp</dimen>
+    <dimen name="spacing_M">8dp</dimen>
+    <dimen name="spacing_M2">10dp</dimen>
+    <dimen name="spacing_M3">12dp</dimen>
+    <dimen name="spacing_M4">14dp</dimen>
+    <dimen name="spacing_L">16dp</dimen>
+    <dimen name="spacing_L2">18dp</dimen>
+    <dimen name="spacing_L3">22dp</dimen>
+    <dimen name="spacing_XL">24dp</dimen>
+    <dimen name="spacing_XL2">28dp</dimen>
+    <dimen name="spacing_XXL">36dp</dimen>
+    <dimen name="spacing_XXL2">38dp</dimen>
+    <dimen name="spacing_XXL3">40dp</dimen>
+    <dimen name="spacing_XXXL">56dp</dimen>
+    <dimen name="spacing_line">1px</dimen>
+
+
+    <!--file preview image item-->
+    <dimen name="file_preview_icon_height">80dp</dimen>
+    <dimen name="file_preview_icon_width">80dp</dimen>
+
+    <dimen name="preview_gallery_preview_file_item_icon_width">42dp</dimen>
+    <dimen name="preview_gallery_preview_file_item_icon_height">42dp</dimen>
+    <dimen name="preview_gallery_preview_media_item_icon_width">120dp</dimen>
+    <dimen name="preview_gallery_preview_media_item_icon_height">120dp</dimen>
+    <dimen name="preview_gallery_preview_media_item_spacing">3dp</dimen>
+    <dimen name="preview_gallery_preview_checked_icon_width">24dp</dimen>
+    <dimen name="preview_gallery_preview_checked_icon_height">24dp</dimen>
+    <dimen name="preview_gallery_preview_checked_icon_margin_end">3dp</dimen>
+    <dimen name="preview_gallery_preview_checked_icon_margin_top">3dp</dimen>
 </resources>
