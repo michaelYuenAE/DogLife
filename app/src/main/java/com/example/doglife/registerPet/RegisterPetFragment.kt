@@ -26,6 +26,7 @@ import com.lzy.imagepicker.bean.ImageItem
 import com.lzy.imagepicker.ui.ImageGridActivity
 import com.lzy.imagepicker.view.CropImageView
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,6 +43,10 @@ class RegisterPetFragment: Fragment() {
     private var imagesList: MutableLiveData<List<ImageItem>?> = MutableLiveData(null)
     private val TAG: String = this::class.java.simpleName
 
+    companion object {
+        const val INTENT_SELECT_IMAGE_REQUEST_CODE = 1
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,7 +61,7 @@ class RegisterPetFragment: Fragment() {
         mImagePicker.isShowCamera = true //显示拍照按钮
         mImagePicker.isCrop = true //允许裁剪（单选才有效）
         mImagePicker.isSaveRectangle = true //是否按矩形区域保存
-        mImagePicker.selectLimit = 9 //选中数量限制
+        mImagePicker.selectLimit = 10 //选中数量限制
         mImagePicker.style = CropImageView.Style.RECTANGLE //裁剪框的形状
         mImagePicker.focusWidth = 800 //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
         mImagePicker.focusHeight = 800 //裁剪框的高度。单位像素（圆形自动取宽高最小值）
@@ -66,7 +71,7 @@ class RegisterPetFragment: Fragment() {
 
         mBinding.addImageField.ivAdd.setOnClickListener(View.OnClickListener {
             val intent = Intent(mContext, ImageGridActivity::class.java)
-            startActivityForResult(intent, 1)
+            startActivityForResult(intent, INTENT_SELECT_IMAGE_REQUEST_CODE)
         })
 
         mBinding.buttonSubmit.setOnClickListener(View.OnClickListener {
@@ -81,6 +86,7 @@ class RegisterPetFragment: Fragment() {
         initRegisterView()
         initClickListener()
         initImageListObserver()
+        initPreviewImageView()
     }
 
     private fun initImageListObserver() {
@@ -89,6 +95,19 @@ class RegisterPetFragment: Fragment() {
                 mImagePreviewAdapter?.setData(data)
             }
         })
+    }
+
+    private fun initPreviewImageView() {
+        mImagePreviewAdapter = FilePreviewAdapter(mContext) { view, path ->
+            val newImageList = imagesList.value?.filter { it.path != path} ?: mutableListOf()
+            imagesList.postValue(newImageList)
+        }
+        mBinding.addImageField.rvImagePreview.layoutManager = LinearLayoutManager(
+            context,
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+        mBinding.addImageField.rvImagePreview.adapter = mImagePreviewAdapter
     }
 
     private fun initRegisterView() {
@@ -106,16 +125,24 @@ class RegisterPetFragment: Fragment() {
                 checkedRadioButtonId
             ).text.toString()
             val address = mBinding.addressField.tvDescription.text.toString().trim()
-            //image later
             if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(address)) {
                 sendPost(name, type, address)
             }
         }
     }
 
-    //call api to register a new pet
     private fun sendPost(name: String, type: String, address: String) {
-        mApiService.registerAnimal(name, type, address, "register_pet").enqueue(object :
+
+        val images: ArrayList<MultipartBody.Part> = ArrayList()
+        imagesList.value?.forEachIndexed { index, image ->
+            images.add(ApiUtils.prepareImageFilePart("file" + (index + 1), File(image.path)))
+        }
+        val map: HashMap<String, RequestBody> = HashMap()
+        map["name"] = ApiUtils.createPartFromString(name)
+        map["type"] = ApiUtils.createPartFromString(type)
+        map["address"] = ApiUtils.createPartFromString(address)
+
+        mApiService.uploadFileWithPartMap(map, images).enqueue(object :
             Callback<ApiService.RegisterPetResult> {
 
             override fun onResponse(
@@ -140,26 +167,19 @@ class RegisterPetFragment: Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+        if (resultCode == ImagePicker.RESULT_CODE_ITEMS && requestCode == INTENT_SELECT_IMAGE_REQUEST_CODE) {
             if (data != null) {
-                imagesList.postValue(data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) as List<ImageItem>?)
-                imagesList.value.let { data ->
-                    if (data.isNullOrEmpty()) {
-                        return
-                    }
-                    mImagePreviewAdapter = FilePreviewAdapter(mContext, data) { view, path ->
-                        val newImageList = imagesList.value?.filter { it.path != path} ?: mutableListOf()
-                        imagesList.postValue(newImageList)
-                    }
-                    mBinding.addImageField.imagePreview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    mBinding.addImageField.imagePreview.adapter = mImagePreviewAdapter
+                try {
+                    val imageResult = data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS) as List<ImageItem>?
+                    imagesList.postValue(imageResult)
                     Toast.makeText(
                         requireContext(),
-                        "Selected: ${data.size} images",
+                        "Selected: ${imageResult?.size} images",
                         Toast.LENGTH_SHORT
                     ).show()
-                }
+                } catch (e: Exception) {
 
+                }
             }
         }
     }
@@ -175,7 +195,7 @@ class RegisterPetFragment: Fragment() {
             val file = File(image.path)
             files["file" + index + "\" filename=\"" + file.name] = RequestBody.create(
                 MediaType.parse(
-                    imagesList.value?.get(index)?.mimeType?: ""
+                    imagesList.value?.get(index)?.mimeType ?: ""
                 ), file
             )
         }
@@ -185,7 +205,7 @@ class RegisterPetFragment: Fragment() {
                 call: Call<ApiService.UploadResult>?,
                 response: Response<ApiService.UploadResult>
             ) {
-                if (response.isSuccessful && response.body().code == 1) {
+                if (response.isSuccessful && response.body()?.code == INTENT_SELECT_IMAGE_REQUEST_CODE) {
                     Toast.makeText(mContext, "Upload success", Toast.LENGTH_SHORT).show();
                     Log.i(
                         TAG,
@@ -195,7 +215,7 @@ class RegisterPetFragment: Fragment() {
                     Log.i(
                         TAG,
                         "The relative address of the picture is:" + listToString(
-                            response.body().image_urls,
+                            response.body()?.image_urls,
                             ','
                         )
                     );

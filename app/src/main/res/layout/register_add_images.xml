@@ -6,8 +6,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="72dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:minHeight="72dp">
 
         <TextView
             android:id="@+id/tv_title"
@@ -19,10 +20,8 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
             tools:text="Add image" />
 
         <ImageView
@@ -33,18 +32,17 @@
             android:layout_marginStart="@dimen/spacing_big"
             android:src="@drawable/ic_add"
             android:background="@drawable/et_border_bg"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toEndOf="@id/tv_title"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title"
             android:contentDescription="@string/register_add_image" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/image_preview"
+            android:id="@+id/rv_image_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/iv_add"
+            app:layout_constraintBottom_toTopOf="@id/divider"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <View
@@ -53,6 +51,7 @@
             android:layout_height="0.5dp"
             android:layout_marginTop="16dp"
             android:background="@color/gray"
+            app:layout_constraintTop_toBottomOf="@id/rv_image_preview"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

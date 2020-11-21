@@ -2,21 +2,21 @@ package com.example.doglife.retrofit
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.PartMap
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 interface ApiService {
+    @Multipart
     @POST("/register_pet")
     fun registerAnimal(
         @Query("name") name: String,
         @Query("type") type: String,
         @Query("address") address: String,
-        @Query("subject") subject: String
+        @Query("subject") subject: String,
+        @PartMap files: HashMap<String, RequestBody>
     ): Call<RegisterPetResult>
 
     class RegisterPetResult {
@@ -35,6 +35,13 @@ interface ApiService {
         @PartMap files: Map<String, RequestBody>
     ): Call<UploadResult>
 
+
+    @Multipart
+    @POST("/upload_pet")
+    fun uploadFileWithPartMap(
+        @PartMap partMap: HashMap<String, RequestBody>,
+        @Part file: List<MultipartBody.Part>?
+    ): Call<RegisterPetResult>
 
     class UploadResult {
         var code = 0

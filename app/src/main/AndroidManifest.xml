@@ -17,6 +17,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <nav-graph android:value="@navigation/pet" />
         </activity>
         <meta-data
             android:name="preloaded_fonts"

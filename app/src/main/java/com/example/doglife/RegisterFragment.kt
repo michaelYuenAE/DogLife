@@ -1,34 +1,46 @@
 package com.example.doglife
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-class RegisterFragment : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_register)
+class RegisterFragment : Fragment() {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_register, container, false)
     }
 
-    fun register(v: View?) {
-        val usernameView = findViewById<EditText>(R.id.username)
-        val firstNameView = findViewById<EditText>(R.id.firstName)
-        val lastNameView = findViewById<EditText>(R.id.lastName)
-        val passwordView = findViewById<EditText>(R.id.password)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        register(view)
+    }
+
+    private fun register(v: View) {
+        val usernameView = v.findViewById<EditText>(R.id.username)
+        val firstNameView = v.findViewById<EditText>(R.id.firstName)
+        val lastNameView = v.findViewById<EditText>(R.id.lastName)
+        val passwordView = v.findViewById<EditText>(R.id.password)
         val username = usernameView.text.toString().trim { it <= ' ' }
         val firstName = firstNameView.text.toString().trim { it <= ' ' }
         val lastName = lastNameView.text.toString().trim { it <= ' ' }
         val password = passwordView.text.toString().trim { it <= ' ' }
         if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() || password.isEmpty()) {
             Toast.makeText(
-                applicationContext,
+                requireContext(),
                 "Something is wrong. Please check your inputs.",
                 Toast.LENGTH_LONG
             ).show()
@@ -47,11 +59,11 @@ class RegisterFragment : AppCompatActivity() {
                 MediaType.parse("application/json; charset=utf-8"),
                 registrationForm.toString()
             )
-            postRequest(SERVER_POST_URL, body)
+            postRequest(SERVER_POST_URL, body, v)
         }
     }
 
-    private fun postRequest(postUrl: String, postBody: RequestBody) {
+    private fun postRequest(postUrl: String, postBody: RequestBody, v: View) {
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(postUrl)
@@ -62,9 +74,9 @@ class RegisterFragment : AppCompatActivity() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 call.cancel()
-                runOnUiThread {
+                requireActivity().runOnUiThread {
                     val responseText =
-                        findViewById<TextView>(R.id.responseTextRegister)
+                        v.findViewById<TextView>(R.id.responseTextRegister)
                     responseText.text = "Failed to Connect to Server. Please Try Again."
                 }
             }
@@ -74,19 +86,22 @@ class RegisterFragment : AppCompatActivity() {
                 response: Response
             ) {
                 val responseTextRegister =
-                    findViewById<TextView>(R.id.responseTextRegister)
+                    v.findViewById<TextView>(R.id.responseTextRegister)
                 try {
                     val responseString = response.body()!!.string().trim { it <= ' ' }
-                    runOnUiThread {
-                        if (responseString == "success") {
-                            responseTextRegister.text = "Registration completed successfully."
-                            finish()
-                        } else if (responseString == "username") {
-                            responseTextRegister.text =
-                                "Username already exists. Please chose another username."
-                        } else {
-                            responseTextRegister.text =
-                                "Something went wrong. Please try again later."
+                    requireActivity().runOnUiThread {
+                        when (responseString) {
+                            "success" -> {
+                                responseTextRegister.text = "Registration completed successfully."
+                            }
+                            "username" -> {
+                                responseTextRegister.text =
+                                    "Username already exists. Please chose another username."
+                            }
+                            else -> {
+                                responseTextRegister.text =
+                                    "Something went wrong. Please try again later."
+                            }
                         }
                     }
                 } catch (e: Exception) {

@@ -20,9 +20,10 @@ typealias FileClickCallback = (view: View, path: String) -> Unit
 
 class FilePreviewAdapter(
     private val context: Context,
-    private var dataList: List<ImageItem>,
     private val clickCallback: FileClickCallback
 ) : RecyclerView.Adapter<FilePreviewAdapter.ItemViewHolder>() {
+
+    private var dataList: List<ImageItem> = emptyList()
 
     init {
         setHasStableIds(true)
