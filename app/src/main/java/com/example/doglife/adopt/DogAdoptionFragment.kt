@@ -9,12 +9,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.doglife.MainActivity
 import com.example.doglife.model.*
 import com.example.doglife.databinding.FragmentAdoptOverviewBinding
+import com.example.doglife.databinding.SillycheckBinding
 import java.util.*
 
 class DogAdoptionFragment: Fragment(), PetOverviewAdapter.ItemListener {
+
+    companion object {
+        private val TAG = DogAdoptionFragment::class.java.name
+    }
+
     private lateinit var mBinding: FragmentAdoptOverviewBinding
+
     private lateinit var mContext: Context
     private lateinit var mViewModel: AdoptViewModel
 
@@ -23,6 +31,7 @@ class DogAdoptionFragment: Fragment(), PetOverviewAdapter.ItemListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ViewModelProvider(this).get(AdoptViewModel::class.java)
+        getAdoptData()
     }
 
     override fun onCreateView(
@@ -40,14 +49,19 @@ class DogAdoptionFragment: Fragment(), PetOverviewAdapter.ItemListener {
         initAdoptionPage()
     }
 
+    private fun getAdoptData() {
+
+    }
+
     private fun initAdoptionPage() {
         val dummyDogList = mutableListOf<Dog>()
-        for (x in 0..10){
+        for (x in 0..10) {
             dummyDogList.add(dummyDog)
         }
         mBinding.rvPetOverview.adapter = PetOverviewAdapter(dummyDogList, mContext, this)
-        mBinding.rvPetOverview.layoutManager = GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false)
-//        mBinding.rvPetOverview.layoutManager = AutoFitGridLayoutManager(mContext, 500)
+        mBinding.rvPetOverview.layoutManager =
+            GridLayoutManager(mContext, 3, GridLayoutManager.VERTICAL, false)
+        mBinding.rvPetOverview.layoutManager = AutoFitGridLayoutManager(mContext, 500)
     }
 
     override fun onItemClick(item: Dog) {

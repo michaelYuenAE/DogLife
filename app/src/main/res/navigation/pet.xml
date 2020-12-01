@@ -19,7 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_home"
+    android:id="@+id/pet"
     app:startDestination="@id/home_dest">
 
     <fragment
@@ -27,13 +27,5 @@
         android:label="@string/title_pet"
         android:name="com.example.doglife.adopt.DogAdoptionFragment"
         tools:layout="@layout/fragment_adopt_overview">
-        <action
-            android:id="@+id/action_title_to_register"
-            app:destination="@id/register_pet"/>
     </fragment>
-    <fragment
-        android:id="@+id/register_pet"
-        android:label="@string/title_about"
-        android:name="com.example.doglife.registerPet.RegisterPetFragment"
-        tools:layout="@layout/fragment_register_pet"/>
 </navigation>

@@ -18,7 +18,13 @@ import java.io.IOException
 import java.util.concurrent.Executors
 
 const val SERVER_POST_URL = "http://192.168.1.15:5000"
+
 class LoginFragment : Fragment() , LoginView {
+
+    companion object {
+        private val TAG = LoginFragment::class.java.name
+    }
+
     private lateinit var mContext: Context
     private lateinit var mBinding: FragmentLoginBinding
 

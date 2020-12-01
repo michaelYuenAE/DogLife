@@ -9,12 +9,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.doglife.adopt.DogAdoptionFragment
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
 class RegisterFragment : Fragment() {
+
+    companion object {
+        private val TAG = RegisterFragment::class.java.name
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

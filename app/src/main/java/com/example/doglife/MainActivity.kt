@@ -13,23 +13,33 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private val TAG = MainActivity::class.java.name
+    }
+
     private var currentNavController: LiveData<NavController>? = null
     private lateinit var mBinding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
+        requestPermissions()
         mBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(mBinding.root)
 
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+        setContentView(mBinding.root)
+
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), 0)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         // Now that BottomNavigationBar has restored its instance state
-        // and its selectedItemId, we can proceed with setting up the
+        // and its selectedItemId, we c an proceed with setting up the
         // BottomNavigationBar with Navigation
         setupBottomNavigationBar()
     }
@@ -38,8 +48,7 @@ class MainActivity : AppCompatActivity() {
      * Called on first creation and when restoring state.
      */
     private fun setupBottomNavigationBar() {
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav)
-
+        val bottomNavigationView = mBinding.bottomNav
         val navGraphIds = listOf(R.navigation.pet, R.navigation.login, R.navigation.register)
 
         // Setup the bottom navigation view with a login of navigation graphs
