@@ -36,7 +36,7 @@ class PetOverviewAdapter(dummyDogList: MutableList<Dog>, context: Context, itemL
 
     class ViewHolder(val binding: ViewDataBinding, val listener: ItemListener, val context: Context): RecyclerView.ViewHolder(binding.root), View.OnClickListener {
         lateinit var mDog: Dog
-        fun bind(dog: Dog) {
+        fun bind(dog: Dog) {    
             mDog = dog
             binding.root.imageView.setImageDrawable(context.resources.getDrawable(R.drawable.dummy_dog_aladdin))
             binding.root.textView.text = dog.name

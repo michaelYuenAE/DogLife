@@ -20,12 +20,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login"
-    app:startDestination="@+id/login">
+    app:startDestination="@+id/user_login">
 
     <fragment
-            android:id="@+id/login"
+            android:id="@+id/user_login"
             android:label="@string/title_login"
-            android:name="com.example.doglife.LoginFragment"
+            android:name="com.example.doglife.login.LoginFragment"
             tools:layout="@layout/fragment_login">
     </fragment>
 </navigation>

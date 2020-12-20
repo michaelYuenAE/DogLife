@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -42,9 +43,16 @@ interface ApiService {
         @PartMap partMap: HashMap<String, RequestBody>,
         @Part file: List<MultipartBody.Part>?
     ): Call<RegisterPetResult>
-
     class UploadResult {
         var code = 0
         var image_urls: List<String>? = null
     }
+
+
+    @GET("/get_pet_overview")
+    fun getPetOverview(
+        @Query("type") type: String,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): Call<JsonObject>
 }

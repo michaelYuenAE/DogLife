@@ -57,17 +57,16 @@ class RegisterPetFragment: Fragment() {
         mApiService = ApiUtils.getApiService()
 
         mImagePicker = ImagePicker.getInstance()
-        mImagePicker.imageLoader = GlideImageLoader(mContext) //设置图片加载器
-        mImagePicker.isShowCamera = true //显示拍照按钮
-        mImagePicker.isCrop = true //允许裁剪（单选才有效）
-        mImagePicker.isSaveRectangle = true //是否按矩形区域保存
-        mImagePicker.selectLimit = 10 //选中数量限制
-        mImagePicker.style = CropImageView.Style.RECTANGLE //裁剪框的形状
-        mImagePicker.focusWidth = 800 //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        mImagePicker.focusHeight = 800 //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        mImagePicker.outPutX = 1000 //保存文件的宽度。单位像素
-        mImagePicker.outPutY = 1000 //保存文件的高度。单位像素
-
+        mImagePicker.imageLoader = GlideImageLoader(mContext)
+        mImagePicker.isShowCamera = true
+        mImagePicker.isCrop = true
+        mImagePicker.isSaveRectangle = true
+        mImagePicker.selectLimit = 10
+        mImagePicker.style = CropImageView.Style.RECTANGLE
+        mImagePicker.focusWidth = 800
+        mImagePicker.focusHeight = 800
+        mImagePicker.outPutX = 1000
+        mImagePicker.outPutY = 1000
 
         mBinding.addImageField.ivAdd.setOnClickListener(View.OnClickListener {
             val intent = Intent(mContext, ImageGridActivity::class.java)

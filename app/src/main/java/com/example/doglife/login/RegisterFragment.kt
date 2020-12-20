@@ -1,4 +1,4 @@
-package com.example.doglife
+package com.example.doglife.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,9 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.doglife.adopt.DogAdoptionFragment
+import com.example.doglife.R
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject

@@ -27,5 +27,17 @@
         android:label="@string/title_pet"
         android:name="com.example.doglife.adopt.DogAdoptionFragment"
         tools:layout="@layout/fragment_adopt_overview">
+        <action
+            android:id="@+id/action_overview_to_register"
+            app:destination="@id/register_pet"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
+    <fragment
+        android:id="@+id/register_pet"
+        android:label="@string/title_about"
+        android:name="com.example.doglife.registerPet.RegisterPetFragment"
+        tools:layout="@layout/fragment_register_pet"/>
 </navigation>

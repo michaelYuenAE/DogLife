@@ -1,4 +1,4 @@
-package com.example.doglife
+package com.example.doglife.login
 
 import android.content.Context
 import android.content.Intent
@@ -9,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import com.example.doglife.R
 import com.example.doglife.databinding.FragmentLoginBinding
-import com.example.doglife.login.LoginView
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -51,8 +52,7 @@ class LoginFragment : Fragment() , LoginView {
             login()
         }
         mBinding.tvRegisterButton.setOnClickListener {
-//            val intent = Intent(this, FragmentRegister::class.java)
-//            startActivity(intent)
+//            view?.findNavController()?.navigate(R.id.action_overview_to_register)
         }
     }
 
